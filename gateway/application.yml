@@ -1,0 +1,5 @@
+info:
+  app:
+    name: "gateway"
+    description: "Eazy Bank Gateway Microservice"
+    version: "1.0.0"
