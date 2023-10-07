@@ -14,11 +14,15 @@ spring:
     password: ${RABBITMQ_PASSWORD}
 
   # DESC: Tells the gateway to locate all the info about registered microservices
+  # NOTE: With discovery locator enabled, you do not have to manually configure custom routes to microservices (however this feature has its limitations and it's better to set up custom routes)
+  # NOTE: Disable this feature if you want set up custom routes
   cloud:
     gateway:
       discovery:
         locator:
           enabled: true
+          # DESC: Make registered microservice names be lower-cased when using them as url paths
+          lower-case-service-id: true
 
 eureka:
   instance:
