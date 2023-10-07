@@ -13,14 +13,14 @@ spring:
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
 
-  # DESC: Tells the gateway to locate all the info about registered microservices
+  # DESC: Enable to "true" to tells the gateway to automatically locate all the registered microservices
   # NOTE: With discovery locator enabled, you do not have to manually configure custom routes to microservices (however this feature has its limitations and it's better to set up custom routes)
-  # NOTE: Disable this feature if you want set up custom routes
+  # NOTE: RECOMMENDATION: Disable this feature when setting up set up custom routes
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: false
           # DESC: Make registered microservice names be lower-cased when using them as url paths
           lower-case-service-id: true
 
