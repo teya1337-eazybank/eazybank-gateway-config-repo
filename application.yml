@@ -24,6 +24,13 @@ spring:
           # DESC: Make registered microservice names be lower-cased when using them as url paths
           lower-case-service-id: true
 
+      # DESC: Configure timeouts for the gateway
+      httpclient:
+        # DESC: Timeout for the time the gateway will wait to get a connection thread from a microservice
+        connect-timeout: 1000
+        # DESC: Timeout for the time the gateway will wait to get a response back from the microservice
+        response-timeout: 2s
+
 eureka:
   instance:
     # DESC: Setting 'true' tells this service to register with eureka using its IP address instead of its hostname as obtained by the OS/DNS
