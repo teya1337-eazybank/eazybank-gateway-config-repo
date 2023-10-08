@@ -24,7 +24,8 @@ spring:
           # DESC: Make registered microservice names be lower-cased when using them as url paths
           lower-case-service-id: true
 
-      # DESC: Configure timeouts for the gateway
+      # DESC: Globally configure timeouts for the gateway (will work for microservices that do not utilize circuit breaker)
+      # NOTE: Locally defined circuit breaker configs inside the gateway (i.e. RouteConfig) will override these global timeout configs
       httpclient:
         # DESC: Timeout for the time the gateway will wait to get a connection thread from a microservice
         connect-timeout: 1000
