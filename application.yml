@@ -32,6 +32,16 @@ spring:
         # DESC: Timeout for the time the gateway will wait to get a response back from the microservice
         response-timeout: 2s
 
+  data:
+  # NOTE: Redis is used for rate limiting (i.e. token bucket)
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      # DESC: Connection timeout to redis
+      connect-timeout: ${REDIS_CONNECT_TIMEOUT}
+      # DESC: Read timeout
+      timeout: ${REDIS_READ_TIMEOUT}
+
 eureka:
   instance:
     # DESC: Setting 'true' tells this service to register with eureka using its IP address instead of its hostname as obtained by the OS/DNS
@@ -47,6 +57,42 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+
+# DESC: Configure circuit breaker for gateway
+resilience4j:
+  circuitbreaker:
+    configs:
+      # DESC: "default" implies that this is the default setting for all circuit breakers
+      default:
+        # DESC: Register health related information related to circuit breaker and its state to the actuator
+        # NOTE: This option by default is disabled
+        # register-health-indicator: true
+        # DESC: Calculate whether the circuit should be in the open or closed state based on the number of failed calls
+        sliding-window-type: count_based
+        # DESC: Use the last '5' records to calculate whether the circuit state should be open or closed based on the specified threshold (in percentage)
+        sliding-window-size: 10
+        # DESC: During the closed state, trigger a circuit calculation (whether the circuit state should be open or closed) every '5' calls (i.e. every '5' calls during the closed state will trigger the last '5' records defined by 'sliding-window-size' to be calculated)
+        # NOTE: The default value for 'minimum-number-of-calls' is 50
+        minimum-number-of-calls: 10
+        # DESC: Calls that exceed '2s' are considered slow
+        # DEFAULT: By default calls that exceed '60s' are considered slow
+        slow-call-duration-threshold: 2s
+        # DESC: If the calculated number of slow calls is equal to or exceeds this threshold in percentage, then the circuit will be open
+        # NOTE: Being equal to or exceeding the 'slow-rate-threshold' is determined by the percentage of slow calls based on calculating the number of records defined by the 'sliding-window-size' property
+        # EXAMPLE: Given that the 'sliding-window-size' value is 5, then if 3/5 invocations are slow (exceeding 5s), the 'slow-call-rate-threshold' value of 60% will have been equal to or exceeded and the circuit will OPEN
+        slow-call-rate-threshold: 60
+        # DESC: If the calculated number of failed calls is equal to or exceeds this threshold in percentage, then the circuit will be open
+        # NOTE: Exceeding the 'failure-rate-threshold' is determined by the percentage of failed invocations based on calculating the number of records defined by the 'sliding-window-size' property
+        # EXAMPLE: Given that the 'sliding-window-size' value is 5, then if 3/5 invocations fails, the 'failure-rate-threshold' value of 60% will have been equal to or exceeded and the circuit will OPEN
+        failure-rate-threshold: 60
+        # DESC: After opening the circuit, wait this amount of time before half-opening it
+        # DEFAULT: The default value is '60s' to transition the OPEN state into a HALF_OPEN state
+        # NOTE: Once the circuit is half-opened, some calls to the API are permitted without automatically fast-failing them
+        wait-duration-in-open-state: 30s
+        # DESC: This is the number of permitted calls to the API during the HALF_OPEN state
+        # NOTE: If the failure rate of the permitted calls exceed the 'failure-rate-threshold' value, the circuit state will revert back to the OPEN state (otherwise the circuit will transition to the CLOSED state)
+        # EXAMPLE: If the 'permitted-number-of-calls-in-half-open-state' is 3, and the 'failure-rate-threshold' is 60%, then if 2 of the call fails (66.67%), the circuit will revert back to being OPEN (conversely, if two of the calls succeed, then the circuit will transition into the CLOSED state)
+        permitted-number-of-calls-in-half-open-state: 3
 
 # DESC: Actuator endpoint management
 management:
