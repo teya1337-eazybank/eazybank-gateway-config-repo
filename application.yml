@@ -123,3 +123,10 @@ management:
   info:
     env:
       enabled: true
+
+  # DESC: Tells micrometer/prometheus to group all metrics related to the microservice under it's app name
+  # NOTE: This will help you identify the metrics of each microservice
+  # NOTE: Without this property, you'll have a difficult time identifying which metrics belong to which microservice
+  metrics:
+    tags:
+      application: ${SPRING_APPLICATION_NAME}
