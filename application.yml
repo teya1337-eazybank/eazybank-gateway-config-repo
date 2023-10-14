@@ -1,6 +1,11 @@
 server:
   port: ${SERVER_PORT}
 
+logging:
+  pattern:
+    # DESC: Custom logging pattern (for open telemetry)
+    level: "%5p [${SPRING_APPLICATION_NAME},%X{trace_id},%X{span_id}]"
+
 spring:
   application:
     name: ${SPRING_APPLICATION_NAME}
