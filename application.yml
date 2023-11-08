@@ -12,11 +12,11 @@ spring:
 
   # DESC: For spring cloud bus and refreshing microservices' configs with the config-server
   # NOTE: rabbitmq is used to relay info to microservices that configs at the config-server have been updated
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
+  # rabbitmq:
+  #   host: ${RABBITMQ_HOST}
+  #   port: ${RABBITMQ_PORT}
+  #   username: ${RABBITMQ_USERNAME}
+  #   password: ${RABBITMQ_PASSWORD}
 
   # DESC: Enable to "true" to tells the gateway to automatically locate all the registered microservices
   # NOTE: With discovery locator enabled, you do not have to manually configure custom routes to microservices (however this feature has its limitations and it's better to set up custom routes)
