@@ -37,6 +37,15 @@ spring:
         # DESC: Timeout for the time the gateway will wait to get a response back from the microservice
         response-timeout: 2s
 
+
+    # NOTE: Uncomment when using k8s service discovery
+    # NOTE: Comment out when not using k8s service discovery
+    kubernetes:
+      discovery:
+        # DESC: Allow the service to discover the k8s discovery server in other namespaces besides the "default" namespace
+        all-namespaces: true
+
+
   data:
   # NOTE: Redis is used for rate limiting (i.e. token bucket)
     redis:
@@ -47,21 +56,25 @@ spring:
       # DESC: Read timeout
       timeout: ${REDIS_READ_TIMEOUT}
 
-eureka:
-  instance:
-    # DESC: Setting 'true' tells this service to register with eureka using its IP address instead of its hostname as obtained by the OS/DNS
-    # RECOMMENDED: Setting 'true' to 'prefer-ip-address' is the recommended approach.
-    prefer-ip-address: true
 
-  # DESC: Enable yourself to query the eureka registry (to find services)
-  # DESC: Register yourself with eureka
-  # DESC: Locate eureka at the specified url
-  client:
-    enabled: true
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+# NOTE: Uncomment when using eureka (and not k8s service discovery)
+# NOTE: Comment out eureka when using k8s service discovery
+# eureka:
+#   instance:
+#     # DESC: Setting 'true' tells this service to register with eureka using its IP address instead of its hostname as obtained by the OS/DNS
+#     # RECOMMENDED: Setting 'true' to 'prefer-ip-address' is the recommended approach.
+#     prefer-ip-address: true
+
+#   # DESC: Enable yourself to query the eureka registry (to find services)
+#   # DESC: Register yourself with eureka
+#   # DESC: Locate eureka at the specified url
+#   client:
+#     enabled: true
+#     register-with-eureka: true
+#     fetch-registry: true
+#     service-url:
+#       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+
 
 # DESC: Configure circuit breaker for gateway
 resilience4j:
@@ -98,6 +111,7 @@ resilience4j:
         # NOTE: If the failure rate of the permitted calls exceed the 'failure-rate-threshold' value, the circuit state will revert back to the OPEN state (otherwise the circuit will transition to the CLOSED state)
         # EXAMPLE: If the 'permitted-number-of-calls-in-half-open-state' is 3, and the 'failure-rate-threshold' is 60%, then if 2 of the call fails (66.67%), the circuit will revert back to being OPEN (conversely, if two of the calls succeed, then the circuit will transition into the CLOSED state)
         permitted-number-of-calls-in-half-open-state: 3
+
 
 # DESC: Actuator endpoint management
 management:
