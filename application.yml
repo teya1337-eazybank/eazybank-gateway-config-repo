@@ -45,6 +45,8 @@ spring:
         enabled: true
         # DESC: Allow the service to discover the k8s discovery server in other namespaces besides the "default" namespace
         all-namespaces: true
+      # DESC: k8s service url of the k8s discovery server
+      discovery-server-url: ${DISCOVERY_SERVER_URL}
 
 
     # NOTE: Uncomment when using k8s service discovery
