@@ -47,6 +47,15 @@ spring:
         all-namespaces: true
 
 
+    # NOTE: Uncomment when using k8s service discovery
+    # NOTE: Comment out when not using k8s service discovery
+    # NOTE: This is a bug fix which somehow doesn't work with the gateway
+    discovery:
+      client:
+        health-indicator:
+          enabled: false
+
+
   data:
   # NOTE: Redis is used for rate limiting (i.e. token bucket)
     redis:
